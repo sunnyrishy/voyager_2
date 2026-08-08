@@ -139,7 +139,7 @@ toolRouter.post('/tools/search_accommodations', async (req, res) => {
   } catch (err) {
     const e = err instanceof Stay22Error
       ? err
-      : new Stay22Error(0, err?.message || 'Unknown error', 'Something broke on my side — try that again.');
+      : new Stay22Error(0, err?.message || 'Unknown error', 'Something broke on my side. Try that again.');
     // 200 + ok:false so the tool result always reaches the agent gracefully.
     res.json({ ok: false, error: { code: e.code, message: e.message, spoken: e.spoken } });
   }

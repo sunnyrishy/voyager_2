@@ -35,20 +35,20 @@ function friendly(status) {
       // a bad checkin date. Check the server console for the raw Stay22
       // response body (logged below) to see the actual reason.
       return new Stay22Error(400, 'Bad request',
-        "That search didn't go through — could be the location, the dates, or another filter. Can you confirm the destination and check-in/check-out dates?");
+        "That search didn't go through. Could be the location, the dates, or another filter. Can you confirm the destination and the checkin and checkout dates?");
     case 401:
       return new Stay22Error(401, 'Invalid API key',
-        "I'm having a credentials hiccup with the hotel API — one moment.");
+        "I'm having a credentials hiccup with the hotel API. One moment.");
     case 429:
       return new Stay22Error(429, 'Rate limit exceeded',
-        "I'm searching a bit too fast for the API — give me a few seconds and ask again.");
+        "I'm searching a bit too fast for the API. Give me a few seconds and ask again.");
     case 502:
     case 504:
       return new Stay22Error(status, 'Upstream issue',
-        "The booking suppliers are running slow right now — want to try that again?");
+        "The booking suppliers are running slow right now. Want to try that again?");
     default:
       return new Stay22Error(status, `Unexpected status ${status}`,
-        "Something went wrong on the hotel side — let's try again.");
+        "Something went wrong on the hotel side. Let's try again.");
   }
 }
 
@@ -87,7 +87,7 @@ export async function searchAccommodations(params = {}) {
       res = await fetch(url, { headers });
     } catch {
       lastErr = new Stay22Error(0, 'Network error',
-        "I couldn't reach the hotel API — check the connection and try again.");
+        "I couldn't reach the hotel API. Check the connection and try again.");
       await sleep(500 * 2 ** attempt);
       continue;
     }
@@ -98,7 +98,7 @@ export async function searchAccommodations(params = {}) {
         data = await res.json();
       } catch {
         throw new Stay22Error(0, 'Malformed response',
-          'The hotel API returned something unreadable — try again.');
+          'The hotel API returned something unreadable. Try again.');
       }
       return {
         data,

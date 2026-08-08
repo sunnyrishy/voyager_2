@@ -85,7 +85,7 @@ NEVER answer a search or refinement from memory or by guessing plausible-soundin
 If the advisor is vague, ask one short clarifying question. Never ramble.`;
 
 const FIRST_MESSAGE =
-  "Voyager online — live inventory across Booking, Expedia, Hotels.com and VRBO. Where's your client headed, and when?";
+  "Voyager online, live inventory across Booking, Expedia, Hotels.com and VRBO. Where's your client headed, and when?";
 
 const TOOL_NAME = 'search_accommodations';
 

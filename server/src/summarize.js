@@ -63,13 +63,13 @@ export function buildSpokenSummary({ turn, params, meta, cards, callouts }) {
         ? `Found ${total} place${total === 1 ? '' : 's'} ${where}${when}${budget}.`
         : `Nothing matched ${where}${when}${budget}. I can raise the budget or widen the area.`
       : total > 0
-        ? `Got it — refined. ${total} match${total === 1 ? '' : 'es'} now.`
+        ? `Got it, refined. ${total} match${total === 1 ? '' : 'es'} now.`
         : `That refinement emptied the list. Want me to loosen the budget or the area?`
   );
 
   cards.slice(0, 3).forEach((c, i) => {
     const bits = [];
-    if (c.stars) bits.push(`${c.stars}-star`);
+    if (c.stars) bits.push(`${c.stars} star`);
     if (c.guestRating != null) bits.push(`guests rate it ${c.guestRating} out of 10`);
     if (c.freeCancellation) bits.push('free cancellation');
     const price =
@@ -78,7 +78,7 @@ export function buildSpokenSummary({ turn, params, meta, cards, callouts }) {
           ? ` $${Math.round(c.total / nights)} a night on ${c.bestOffer.label}`
           : ` $${c.total} on ${c.bestOffer.label}`
         : '';
-    out.push(`${i + 1}: ${c.name}${bits.length ? ` — ${bits.join(', ')}` : ''}${price}.`);
+    out.push(`${i + 1}: ${c.name}${bits.length ? `, ${bits.join(', ')}` : ''}${price}.`);
   });
 
   callouts.slice(0, 2).forEach((co) => {

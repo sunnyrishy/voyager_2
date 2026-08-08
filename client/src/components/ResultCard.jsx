@@ -1,6 +1,6 @@
-export default function ResultCard({ card, nights }) {
+export default function ResultCard({ card, nights, index = 0 }) {
   return (
-    <article className="card">
+    <article className="card" style={{ '--i': index }}>
       {card.thumbnail ? (
         <img
           src={card.thumbnail}

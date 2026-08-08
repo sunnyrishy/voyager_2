@@ -45,7 +45,7 @@ export function useVoyagerAgent() {
         error: {
           code: 0,
           message: String(e),
-          spoken: "I couldn't reach my search backend — is the local server running?",
+          spoken: "I couldn't reach my search backend. Is the local server running?",
         },
       };
     }
@@ -54,7 +54,7 @@ export function useVoyagerAgent() {
   const start = useCallback(async () => {
     setError(null);
     if (!AGENT_ID) {
-      setError('Missing VITE_ELEVENLABS_AGENT_ID in client/.env — paste your agent ID and restart Vite.');
+      setError('Missing VITE_ELEVENLABS_AGENT_ID in client/.env. Paste your agent ID and restart Vite.');
       return;
     }
     setConnStatus('connecting');

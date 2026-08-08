@@ -2,14 +2,15 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useVoyagerAgent } from './hooks/useVoyagerAgent';
 import ResultCard from './components/ResultCard';
 import VoiceOrb from './components/VoiceOrb';
+import Logo from './components/Logo';
 
 const STATUS_LABEL = {
   idle: 'Tap to start',
-  connecting: 'Connecting…',
+  connecting: 'Connecting',
   listening: 'Listening',
   thinking: 'Thinking',
   speaking: 'Speaking',
-  connected: 'Ready — go ahead',
+  connected: 'Ready to listen',
 };
 
 /** Map the raw SDK/connection state to the single state the orb renders. */
@@ -44,7 +45,8 @@ export default function App() {
     <div className="app">
       <header>
         <div className="brand">
-          <span className="brand-mark">✈️</span> Voyager
+          <Logo />
+          <span>Voyager</span>
         </div>
         <div className="brand-sub">AI voice copilot for travel advisors</div>
       </header>
@@ -70,7 +72,7 @@ export default function App() {
             <p className="caption caption-hint">
               {inCall
                 ? 'Try “Find me a hotel in Miami under $300 a night for September 15 to 18.”'
-                : 'Start a call and talk like a travel advisor — hands-free.'}
+                : 'Start a call and talk like a travel advisor, completely hands free.'}
             </p>
           )}
         </div>
@@ -115,12 +117,16 @@ export default function App() {
         <div className="results-scroll scroll" ref={resultsRef}>
           {turns.length === 0 && (
             <div className="empty">
-              Results appear here as you talk. Each refinement stacks a new turn on top — watch
-              the negotiation happen, just like a real advisor call.
+              Results appear here as you talk. Each refinement stacks a new turn on top so you
+              can watch the negotiation happen, just like a real advisor call.
             </div>
           )}
-          {turns.map((turn) => (
-            <div key={turn.id} className={`turn ${turn.dimmed ? 'dimmed' : 'active'}`}>
+          {turns.map((turn, i) => (
+            <div
+              key={turn.id}
+              className={`turn ${turn.dimmed ? 'dimmed' : 'active'}`}
+              style={{ '--i': i }}
+            >
               <div className="turn-head">
                 <span className="turn-label">
                   {turn.dimmed ? 'Earlier' : 'Current'} ·{' '}
@@ -137,19 +143,19 @@ export default function App() {
                     <div className="callouts">
                       {turn.callouts.map((c, i) => (
                         <div key={i} className="callout">
-                          ⚡ <b>${c.saveAmount} cheaper on {c.bestLabel}</b> than {c.worstLabel} —{' '}
+                          ⚡ <b>${c.saveAmount} cheaper on {c.bestLabel}</b> than {c.worstLabel} for{' '}
                           {c.propertyName}
                         </div>
                       ))}
                     </div>
                   )}
                   <div className="cards">
-                    {(turn.cards || []).map((c) => (
-                      <ResultCard key={c.id} card={c} nights={turn.meta?.nights} />
+                    {(turn.cards || []).map((c, i) => (
+                      <ResultCard key={c.id} card={c} nights={turn.meta?.nights} index={i} />
                     ))}
                   </div>
                   {turn.cards?.length === 0 && (
-                    <div className="empty small">No matches — try widening the filters.</div>
+                    <div className="empty small">No matches. Try widening the filters.</div>
                   )}
                 </>
               )}
