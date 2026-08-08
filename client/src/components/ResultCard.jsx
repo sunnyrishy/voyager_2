@@ -4,7 +4,7 @@ export default function ResultCard({ card, nights, index = 0 }) {
       {card.thumbnail ? (
         <img
           src={card.thumbnail}
-          alt=""
+          alt={card.name || 'Hotel photo'}
           className="thumb"
           loading="lazy"
           onError={(e) => (e.target.style.display = 'none')}
