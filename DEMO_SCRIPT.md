@@ -44,6 +44,20 @@ replacement for one.
   from day one." Several judges are Stay22-adjacent; naming this before
   they ask reads as rigor, not a talking point invented for the pitch.
 
+## If asked "what's next" (closing beat or Q&A)
+
+"Every turn already produces the exact labeled data a fine-tuning run would
+need: the advisor's raw request, what the agent extracted as tool
+parameters, and the real Stay22 result. Next is a self-scoring layer on top
+of that: heuristics first (did we extract the right location, dates, and
+budget, did the agent ever speak without a real tool result, how many turns
+to satisfy the advisor), then an LLM-as-judge layer scoring intent-capture
+accuracy per turn. Once enough scored conversations exist, that becomes the
+training set for a travel-advisor-specialized voice model, instead of a
+generic LLM plus a tool call. We didn't build the eval layer tonight, we
+built the product it would learn from." Full architecture in the README
+Roadmap section if anyone wants detail.
+
 ## If a judge asks: "why not Stay22's MCP server / prebuilt agent skill?"
 
 Have this ready, don't get caught flat: Stay22 offers a prebuilt agent skill

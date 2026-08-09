@@ -170,3 +170,36 @@ a new turn stack on top with the previous one dimmed.
 - Stay22: hit `/v2/accommodations` once with your real key; confirm rate headers.
 
 See [DEMO_SCRIPT.md](DEMO_SCRIPT.md) for the pitch and demo flow.
+
+## Roadmap: self-evaluation and adaptive learning
+
+Not built. Documented here because the architecture to support it already
+exists as a side effect of how the app works today, not as something
+bolted on.
+
+For every turn, the pieces of a labeled training example already exist
+independently: the advisor's raw utterance (`transcript` in
+`useVoyagerAgent.js`), what the agent extracted as tool parameters
+(`CLIENT TOOL FIRED` payload), and the real Stay22 result the backend
+returned. Nothing currently connects those three into a scored record.
+
+Planned, in order of effort:
+
+1. **Heuristic self-scoring — no new dependencies.** Per turn: did the
+   extracted params actually cover what the advisor said (location, dates,
+   budget present when mentioned)? Did the agent ever speak *before* a real
+   tool result came back (hallucination risk)? Turn latency. Refinement-loop
+   length (how many turns to satisfy the advisor — an efficiency signal).
+   Computed and logged server-side per session; nothing here needs a new API
+   key.
+2. **LLM-as-judge.** A second, cheap model call per turn scoring
+   intent-capture accuracy and flagging hallucinations more rigorously than
+   heuristics can. Requires an Anthropic or OpenAI key.
+3. **Fine-tuning loop.** Once enough scored conversations exist, use them to
+   fine-tune a travel-advisor-specialized model, closing the loop from
+   "generic LLM plus a tool call" to a model that has actually learned
+   advisor conversation patterns.
+
+None of this conflicts with Stay22's no-persistence restriction — it's
+conversation-quality metadata about *our own agent*, not accommodation
+listing data, so it's outside what that restriction covers.
