@@ -100,8 +100,13 @@ toolRouter.post('/tools/search_accommodations', async (req, res) => {
     const sessionId = String(body.sessionId || agentParams.sessionId || 'default');
 
     const delta = rollDatesToFuture(toStay22Params(agentParams));
-    if (delta.pageSize === undefined) delta.pageSize = 8;
-    delta.pageSize = Math.min(Number(delta.pageSize) || 8, 12);
+    // Stay22's documented pageSize range is 1-100 (default 10). Requesting
+    // more per call doesn't cost extra rate-limit budget (it's the same
+    // single request either way) -- default to 100 so the results panel
+    // shows every match Stay22 has for the query, not an artificially
+    // truncated subset.
+    if (delta.pageSize === undefined) delta.pageSize = 100;
+    delta.pageSize = Math.min(Number(delta.pageSize) || 100, 100);
 
     const current = getSession(sessionId);
     const turn = classifyTurn(current, { ...delta, mode: agentParams.mode });
@@ -110,7 +115,9 @@ toolRouter.post('/tools/search_accommodations', async (req, res) => {
     const { data } = await searchAccommodations(params);
     const results = data.results || [];
     const callouts = computeCallouts(results);
-    const cards = buildCards(results, data.meta, 6);
+    // Show every result Stay22 returned for this query -- no separate
+    // artificial cap layered on top of the pageSize we already requested.
+    const cards = buildCards(results, data.meta, results.length);
     const spoken_summary = buildSpokenSummary({
       turn, params, meta: data.meta, cards, callouts,
     });
